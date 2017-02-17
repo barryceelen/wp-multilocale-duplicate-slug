@@ -1,6 +1,6 @@
 #[Experimental] Multilocale Duplicate Slug
 
-Allow duplicate slugs for post translations when using the [Multilocale](http://google.com) plugin.  
+Allow duplicate slugs for post translations when using the [Multilocale](https://github.com/barryceelen/wp-multilocale) plugin.  
 **Experimental** means currently probably nothing ☠️ works and looks as expected yet.  
 This is meant for personal 🚬 pleasure.
 
