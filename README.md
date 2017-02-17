@@ -1,4 +1,4 @@
-### [Experimental] Multilocale Duplicate Slug
+#[Experimental] Multilocale Duplicate Slug
 
 Allow duplicate slugs for post translations when using the [Multilocale](http://google.com) plugin.  
 **Experimental** means currently probably nothing ☠️ works and looks as expected yet.  
