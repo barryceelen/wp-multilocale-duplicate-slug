@@ -23,6 +23,9 @@
 register_activation_hook( __FILE__, 'multilocale_slug_on_activate' );
 register_deactivation_hook( __FILE__, 'multilocale_slug_on_deactivate' );
 
+// Initialize plugin by adding filters.
+add_action( 'init', 'multilocale_slug_init' );
+
 /**
  * Runs when the plugin is activated.
  *
@@ -42,8 +45,6 @@ function multilocale_slug_on_activate() {
 function multilocale_slug_on_deactivate() {
 	delete_option( 'rewrite_rules' );
 }
-
-add_action( 'init', 'multilocale_slug_init' );
 
 /**
  * Initialize plugin by adding filters.
