@@ -2,10 +2,9 @@
 /**
  * Plugin functions
  *
- * @link       https://github.com/barryceelen/wp-multilocale-duplicate-slug
- * @since      1.0.0
- * @package    WordPress
- * @subpackage Multilocale_Slug
+ * @link    https://github.com/barryceelen/wp-multilocale-duplicate-slug
+ * @since   1.0.0
+ * @package Multilocale_Slug
  */
 
 /**

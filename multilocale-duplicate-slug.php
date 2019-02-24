@@ -4,8 +4,7 @@
  *
  * @link              https://github.com/barryceelen/wp-multilocale-duplicate-slug
  * @since             1.0.0
- * @package           WordPress
- * @subpackage        Multilocale_Slug
+ * @package           Multilocale_Slug
  *
  * Plugin Name:       Multilocale Duplicate Slug
  * Plugin URI:        https://github.com/barryceelen/wp-multilocale-duplicate-slug
