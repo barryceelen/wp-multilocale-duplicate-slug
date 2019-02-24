@@ -30,7 +30,7 @@ register_deactivation_hook( __FILE__, 'multilocale_slug_on_deactivate' );
  */
 function multilocale_slug_on_activate() {
 	$regex = '^' . apply_filters( 'multilocale_slug_attachment_rewrite_slug', 'media' ) . '/([0-9]+)/?';
-	add_rewrite_rule( $regex, 'index.php?attachment_id=$matches[1]', 'top');
+	add_rewrite_rule( $regex, 'index.php?attachment_id=$matches[1]', 'top' );
 	flush_rewrite_rules();
 }
 
