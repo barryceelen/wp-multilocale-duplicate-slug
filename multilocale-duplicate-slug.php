@@ -45,6 +45,11 @@ function multilocale_slug_on_deactivate() {
 
 add_action( 'init', 'multilocale_slug_init' );
 
+/**
+ * Initialize plugin by adding filters.
+ *
+ * @since 1.0.0
+ */
 function multilocale_slug_init() {
 
 	if ( empty( get_option( 'permalink_structure' ) ) || ! function_exists( 'multilocale' ) ) {
