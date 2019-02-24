@@ -138,8 +138,28 @@ function multilocale_slug_filter_unique_post_slug( $slug, $post_id, $post_status
 
 	if ( is_post_type_hierarchical( $post_type ) ) {
 
-		$check_sql = "SELECT post_name FROM $wpdb->posts INNER JOIN $wpdb->term_relationships AS tr ON tr.object_id = ID WHERE post_name = %s AND post_type = %s AND ID != %d AND post_parent = %d AND tr.term_taxonomy_id = %d LIMIT 1";
-		$post_name_check = $wpdb->get_var( $wpdb->prepare( $check_sql, $original_slug, $post_type, $post_id, $post_parent, $post_locale->term_id ) );
+		$check_sql = "
+			SELECT post_name
+			FROM $wpdb->posts
+			INNER JOIN $wpdb->term_relationships AS tr
+			ON tr.object_id = ID
+			WHERE post_name = %s
+			AND post_type = %s
+			AND ID != %d
+			AND post_parent = %d
+			AND tr.term_taxonomy_id = %d
+			LIMIT 1";
+
+		$post_name_check = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			$wpdb->prepare(
+				$check_sql, // phpcs:ignore
+				$original_slug,
+				$post_type,
+				$post_id,
+				$post_parent,
+				$post_locale->term_id
+			)
+		);
 
 		/**
 		 * Filter whether the post slug would make a bad hierarchical post slug.
@@ -151,11 +171,22 @@ function multilocale_slug_filter_unique_post_slug( $slug, $post_id, $post_status
 		 * @param string $post_type   Post type.
 		 * @param int    $post_parent Post parent ID.
 		 */
-		if ( $post_name_check || in_array( $original_slug, $feeds ) || preg_match( "@^($wp_rewrite->pagination_base)?\d+$@", $original_slug )  || apply_filters( 'wp_unique_post_slug_is_bad_hierarchical_slug', false, $original_slug, $post_type, $post_parent ) ) {
+		if ( $post_name_check || in_array( $original_slug, $feeds, true ) || preg_match( "@^($wp_rewrite->pagination_base)?\d+$@", $original_slug ) || apply_filters( 'wp_unique_post_slug_is_bad_hierarchical_slug', false, $original_slug, $post_type, $post_parent ) ) {
 			$suffix = 2;
 			do {
 				$alt_post_name = _truncate_post_slug( $original_slug, 200 - ( strlen( $suffix ) + 1 ) ) . "-$suffix";
-				$post_name_check = $wpdb->get_var( $wpdb->prepare( $check_sql, $alt_post_name, $post_type, $post_id, $post_parent, $post_locale->term_id ) );
+
+				$post_name_check = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+					$wpdb->prepare(
+						$check_sql, // phpcs:ignore
+						$alt_post_name,
+						$post_type,
+						$post_id,
+						$post_parent,
+						$post_locale->term_id
+					)
+				);
+
 				$suffix++;
 			} while ( $post_name_check );
 			$slug = $alt_post_name;
@@ -164,17 +195,35 @@ function multilocale_slug_filter_unique_post_slug( $slug, $post_id, $post_status
 		}
 	} else {
 
-		$check_sql = "SELECT post_name FROM $wpdb->posts INNER JOIN $wpdb->term_relationships AS tr ON tr.object_id = ID WHERE post_name = %s AND post_type = %s AND ID != %d AND tr.term_taxonomy_id = %d LIMIT 1";
-		$post_name_check = $wpdb->get_row( $wpdb->prepare( $check_sql, $original_slug, $post_type, $post_id, $post_locale->term_id ) );
+		$check_sql = "
+			SELECT post_name
+			FROM $wpdb->posts
+			INNER JOIN $wpdb->term_relationships AS tr
+			ON tr.object_id = ID
+			WHERE post_name = %s
+			AND post_type = %s
+			AND ID != %d
+			AND tr.term_taxonomy_id = %d
+			LIMIT 1";
+
+		$post_name_check = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			$wpdb->prepare(
+				$check_sql, // phpcs:ignore
+				$original_slug,
+				$post_type,
+				$post_id,
+				$post_locale->term_id
+			)
+		);
 
 		// Prevent new post slugs that could result in URLs that conflict with date archives.
-		$post = get_post( $post_id );
+		$post                        = get_post( $post_id );
 		$conflicts_with_date_archive = false;
 
-		if ( 'post' === $post_type && ( ! $post || $post->post_name !== $original_slug ) && preg_match( '/^[0-9]+$/', $original_slug ) && $slug_num = intval( $original_slug ) ) {
+		if ( 'post' === $post_type && ( ! $post || $post->post_name !== $original_slug ) && preg_match( '/^[0-9]+$/', $original_slug ) && $slug_num = intval( $original_slug ) ) { // phpcs:ignore
 
 			$permastructs   = array_values( array_filter( explode( '/', get_option( 'permalink_structure' ) ) ) );
-			$postname_index = array_search( '%postname%', $permastructs );
+			$postname_index = array_search( '%postname%', $permastructs, true );
 
 			/*
 			 * Potential date clashes are as follows:
@@ -204,8 +253,19 @@ function multilocale_slug_filter_unique_post_slug( $slug, $post_id, $post_status
 			$suffix = 2;
 			do {
 				$alt_post_name = _truncate_post_slug( $original_slug, 200 - ( strlen( $suffix ) + 1 ) ) . "-$suffix";
-				$post_name_check = $wpdb->get_var( $wpdb->prepare( $check_sql, $alt_post_name, $post_type, $post_id, $post_locale->term_id ) );
+
+				$post_name_check = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+					$wpdb->prepare(
+						$check_sql, // phpcs:ignore
+						$alt_post_name,
+						$post_type,
+						$post_id,
+						$post_locale->term_id
+					)
+				);
+
 				$suffix++;
+
 			} while ( $post_name_check );
 			$slug = $alt_post_name;
 		} else {
