@@ -56,7 +56,7 @@ function multilocale_slug_init() {
 		return;
 	}
 
-	include( 'includes/functions.php' );
+	include 'includes/functions.php';
 
 	// Prevent the Multilocale plugin from trying to redirect an unlocalized url to its localized version.
 	add_filter( 'multilocale_redirect_to_localized_post_url', '__return_false' );
