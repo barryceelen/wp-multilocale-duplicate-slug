@@ -71,12 +71,10 @@ function multilocale_slug_init() {
 	add_filter( 'posts_where', 'multilocale_slug_filter_posts_where_and_join', 10, 2 );
 	add_filter( 'posts_join', 'multilocale_slug_filter_posts_where_and_join', 10, 2 );
 
-
 	/*
 	 * Translating attachments is currently not supported.
 	 * Filtering the query for get_page_by path() is not a happy moment in the life of
 	 * attachment permalinks so let's go ahead and change attachment permalinks.
 	 */
 	add_filter( 'attachment_link', 'multilocale_slug_attachment_link', 10, 2 );
-
 }
